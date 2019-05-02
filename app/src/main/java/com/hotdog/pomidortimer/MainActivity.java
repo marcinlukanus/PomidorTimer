@@ -15,9 +15,11 @@ public class MainActivity extends AppCompatActivity {
     TextView topText;
     CountDownTimerPausable timer;
 
-    final long twentyFiveMinutes = 60 * 25 * 1000;
-    final long fiveMinutes = 60 * 5 * 1000;
+    final long twentyFiveMinutes = (60 * 25 * 1000);
+    final long fiveMinutes = (60 * 5 * 1000);
+    final long fifteenMinutes = (60 * 15 * 1000);
     final long INTERVAL = 1000;
+    int cycles = 0;
     boolean initialClick = true;
     boolean studying = true;
 
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                     topText.setText("Study time!");
                     study.setText("Pause");
                     timer.start();
+                    cycles++;
                 }
             }
         });
@@ -68,14 +71,20 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 timer.cancel();
 
-                if (studying) {
+                if (studying && cycles % 4 != 0) {
                     newTimer(fiveMinutes);
                     timer.start();
                     topText.setText("Break time!");
+
+                } else if (studying && cycles % 4 == 0) {
+                    newTimer(fifteenMinutes);
+                    timer.start();
+                    topText.setText("Long break time!");
                 } else {
                     newTimer(twentyFiveMinutes);
                     timer.start();
                     topText.setText("Study time!");
+                    cycles++;
                 }
                 studying = !studying;
             }
